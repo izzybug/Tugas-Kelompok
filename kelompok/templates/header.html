@@ -87,12 +87,19 @@
             </nav>
           </div>
           <div class="header-btns  header-btn-l-17 ms-auto d-none d-xs-inline-flex align-items-center">
+            {% if current_user.is_authenticated %}
+            <p style='color:white'>
+              <i class="far fa-user-circle fa-2x">Hi, {{name}}</i>
+            </p>
+            {% endif %}
+            {% if not current_user.is_authenticated %}
             <a class="btn sign-in-btn focus-reset" href="/login">
               Sign in
             </a>
             <a class="start-trail-btn btn focus-reset" href="#">
               Start free trail
             </a>
+            {% endif %}
           </div>
           <!-- mobile menu trigger -->
           <div class="mobile-menu-trigger">

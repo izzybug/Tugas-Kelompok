@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json, session,request,redirect,url_for
 from flask_mysqldb import MySQL
+from flask_login import login_required
 import MySQLdb.cursors
 
 # init main app
@@ -21,23 +22,16 @@ def main():
 @app.route('/login', methods=['GET', 'POST'])
 # function login
 def login():
-    # cek jika method POST dan ada pada form data maka proses login
     if request.method == 'POST' and 'InpEmail' in request.form and 'InpPass' in request.form:
-        # buat variabel untuk memudahkan pengolahan data
         email = request.form['InpEmail']
         passwd = request.form['InpPass']
-        # cursor koneksi mysql
+        remember = True if request.form.get('remember') else False
         cur = mysql.connection.cursor()
-        # eksekusi queri
         cur.execute("SELECT * FROM user where email = %s and password = %s", (email, passwd))
-        # fetch hasil queri
         result = cur.fetchall()
-        # cek hasil kueri
         if result:
-            # jika login valid
             session['is_logged_in'] = True
             session['username'] = result[0]
-            # redirect home
             return redirect(url_for('home'))
         else:
             return render_template('login.html')
@@ -60,22 +54,18 @@ def signup():
         msg = 'Please fill out the form !'
     return render_template('signup.html', msg = msg)
         
-# route home dan logout
 @app.route('/home')
-# function home
 def home():
-    # cek session
     if 'is_logged_in' in session:
         return render_template('home.html')
     
 # route logout
 @app.route('/logout')
 def logout():
-    # hapus data
     session.pop('is_logged_in', None)
     session.pop('username', None)
-    # redirect to login page
     return redirect(url_for('login'))
+
 # debug
 if __name__ == '__main__':
     app.run(debug=True)
