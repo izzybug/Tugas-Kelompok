@@ -1,4 +1,4 @@
-from flaskblog import create_app
+from twiceblog import create_app
 
 app = create_app()
 
