@@ -15,3 +15,7 @@ def home():
 @main.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+@main.route("/gallery")
+def gallery():
+    return render_template('gallery.html', title='Gallery')
